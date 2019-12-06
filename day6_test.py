@@ -4,12 +4,12 @@ from aoc import read_file
 
 
 class TestBasic(unittest.TestCase):
-    def test_pass(self):
-        data = puzzle.parse(read_file("06", "1"))
-        result = puzzle.solve(data)
-        print(f"Solution: {result}")
-        self.assertEqual(True, True)
-   def test_pass2(self):
+    # def test_pass(self):
+    #     data = puzzle.parse(read_file("06", "1"))
+    #     result = puzzle.solve(data)
+    #     print(f"Solution: {result}")
+    #     self.assertEqual(True, True)
+    def test_pass2(self):
         data = puzzle.parse(read_file("06", "1"))
         result = puzzle.solve_2(data, "YOU", "SAN")
         print(f"Solution: {result}")

@@ -39,7 +39,7 @@ class Node(object):
         return count
 
 
-class LinkedList(object):
+class LinkedTreeMultiHead(object):
 
     def __init__(self, heads=[]):
         self.heads = heads
@@ -53,11 +53,13 @@ class LinkedList(object):
 
     def insert(self, newHeadNode):
         self.heads.append(newHeadNode)
+
     def remove(self, node):
         self.heads.remove(node)
 
+
 def parse(lines):
-    headNodes = LinkedList()
+    headNodes = LinkedTreeMultiHead()
     for line in lines:
         o1, o2 = line.split(')')
         nodeO1 = headNodes.search(o1)
@@ -65,7 +67,7 @@ def parse(lines):
         if nodeO2 is None:
             nodeO2 = Node(o2)
         else:
-            #remove node02 from headNodes.heads
+            # remove node02 from headNodes.heads
             headNodes.remove(nodeO2)
         if nodeO1 is not None:
             nodeO1.add_child(nodeO2)
@@ -73,7 +75,6 @@ def parse(lines):
             nodeO1 = Node(o1)
             nodeO1.add_child(nodeO2)
             headNodes.insert(nodeO1)
-        print(headNodes.heads[0])
     return headNodes
 
 
@@ -84,16 +85,24 @@ def countOrbit(children):
     return result
 
 
-def solve(linkedList):
+def solve(linkedTreeMultiHead):
     result = 0
-    for head in linkedList.heads:
+    for head in linkedTreeMultiHead.heads:
         result = result + countOrbit(head.children)
     return result
 
-def solve_2(linkedList, oFrom, oTo):
+
+def findCommonAncestor(node1, node2):
+    current = node1
+    while current.search(node2.data) is None:
+        current = current.get_next()
+    return current
+
+
+def solve_2(linkedTreeMultiHead, oFrom, oTo):
     result = 0
-    nodeFrom = likedList.search(oFrom)
-    nodeTo = likedList.search(oTo)
-    for head in linkedList.heads:
-        result = result + countOrbit(head.children)
-    return result
+    nodeFrom = linkedTreeMultiHead.search(oFrom)
+    nodeTo = linkedTreeMultiHead.search(oTo)
+    commonAncestor = findCommonAncestor(nodeFrom, nodeTo)
+    print(commonAncestor)
+    return nodeFrom.numberOfOrbit() + nodeTo.numberOfOrbit() - 2 * commonAncestor.numberOfOrbit()
