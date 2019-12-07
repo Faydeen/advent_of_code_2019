@@ -4,22 +4,19 @@ import intcodeComputer
 from aoc import read_file
 
 
-class TestBasic(unittest.TestCase):
-    def test_pass1(self):
-        data = puzzle.parse(read_file("05", "1"))
-        result = puzzle.solve(data, 1)
-        print(result)
-
+class TestResultats(unittest.TestCase):
     def test_pass2(self):
         data = puzzle.parse(read_file("05", "2"))
         result = puzzle.solve(data, 5)
-        print(result)
+        self.assertEqual(result, 3892695)
 
     def test_pass3(self):
         data = puzzle.parse(read_file("05", "3"))
         result = puzzle.solve(data, 1)
         print(result)
 
+
+class TestUnitaire(unittest.TestCase):
     def testGetActionCode(self):
         answer = intcodeComputer.getAction([1101], 0)
         self.assertEqual(1, answer)
@@ -55,14 +52,14 @@ class TestBasic(unittest.TestCase):
     def testSolve(self):
         data = [3, 0, 4, 0, 99]
         answer = puzzle.solve(data, 1)
-        self.assertEqual(1, answer[0])
+        self.assertEqual(1, answer)
 
     def testSolve2(self):
         data = [3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31,
                 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104,
                 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99]
         answer = puzzle.solve(data, 1)
-        self.assertEqual(999, answer[0])
+        self.assertEqual(999, answer)
         # Should print 1 if input = 8
 
     def testSolve2(self):
@@ -70,14 +67,14 @@ class TestBasic(unittest.TestCase):
                 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104,
                 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99]
         answer = puzzle.solve(data, 8)
-        self.assertEqual(1000, answer[0])
+        self.assertEqual(1000, answer)
 
     def testSolve3(self):
         data = [3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31,
                 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104,
                 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99]
         answer = puzzle.solve(data, 9)
-        self.assertEqual(1001, answer[0])
+        self.assertEqual(1001, answer)
 
 
 if __name__ == '__main__':

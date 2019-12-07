@@ -1,4 +1,4 @@
-def process(instructions, initInstructionPointer, inputs):
+def process(instructions, initInstructionPointer=0, inputs=[]):
     result = None
     instructionPointer = initInstructionPointer
     while instructionPointer < len(instructions):

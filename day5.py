@@ -6,4 +6,4 @@ def parse(lines):
 
 
 def solve(input, id):
-    return intcodeComputer.process(input, id)
+    return intcodeComputer.process(input, 0, [id])[-1]
