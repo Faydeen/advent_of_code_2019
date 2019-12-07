@@ -1,6 +1,6 @@
-def process(instructions, input):
-    result = []
-    instructionPointer = 0
+def process(instructions, initInstructionPointer, inputs):
+    result = None
+    instructionPointer = initInstructionPointer
     while instructionPointer < len(instructions):
         action = getAction(instructions, instructionPointer)
         if action == 99:
@@ -17,13 +17,13 @@ def process(instructions, input):
             instructionPointer += 4
         elif action == 3:
             # set input at adress
-            instructions[instructions[instructionPointer+1]] = input
+            instructions[instructions[instructionPointer+1]] = inputs.pop(0)
             instructionPointer += 2
         elif action == 4:
             # print out
-            print(getParam(instructions, instructionPointer, 1))
-            result.append(getParam(instructions, instructionPointer, 1))
+            result = getParam(instructions, instructionPointer, 1)
             instructionPointer += 2
+            break
         elif action == 5:
             # jump-if-true
             condition = getParam(instructions, instructionPointer, 1)
@@ -55,8 +55,9 @@ def process(instructions, input):
                 instructions[instructions[instructionPointer + 3]] = 0
             instructionPointer += 4
         else:
-            raise RuntimeError(f'bad opcode {action} at position {instructionPointer}')
-    return result
+            raise RuntimeError(
+                f'bad opcode {action} at position {instructionPointer}')
+    return instructions, instructionPointer, inputs, result
 
 
 def getParam(input, instructionPointer, offset):

@@ -41,8 +41,16 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(1, answer)
 
     def testGetParam2(self):
-        answer = intcodeComputer.getParam([1001, 1, 5, 3, 99], 0, 2)
-        self.assertEqual(5, answer)
+        answer = intcodeComputer.getParam([1001, 1, 3, 5, 99], 0, 2)
+        self.assertEqual(3, answer)
+
+    def testGetParam3(self):
+        answer = intcodeComputer.getParam([105, 1, 3, 99], 0, 2)
+        self.assertEqual(99, answer)
+
+    def testGetParam4(self):
+        answer = intcodeComputer.getParam([105, 1, 3, 2, 99], 0, 3)
+        self.assertEqual(3, answer)
 
     def testSolve(self):
         data = [3, 0, 4, 0, 99]
