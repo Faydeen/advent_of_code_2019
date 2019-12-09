@@ -4,75 +4,91 @@ from operator import add, mul
 
 class Computer:
     def __init__(self, instructions):
-        self.instructions = instructions[:]  # Cree une copie superficiel
+        # Init memory
+        self.memory = [0 for i in range(2000)]
+        # Cree une copie superficiel
+        self.memory[:len(instructions)-1] = instructions[:]
         self.pc = 0  # instruction pointer
+        self.rb = 0  # Relative base pointer
         self.inputs = SimpleQueue()
 
-    def getParam(self, offset):
-        instruction = str(self.instructions[self.pc])
+    def get_addr_param(self, offset):
+        instruction = str(self.memory[self.pc])
         mode = 0
         if(len(instruction) > offset + 1):
             mode = int(instruction[len(instruction) - (offset + 2)])
         if mode == 0:
-            return self.instructions[self.instructions[self.pc+offset]]
+            return self.memory[self.pc+offset]
+        elif mode == 1:
+            return self.pc+offset
+        elif mode == 2:
+            return self.rb + self.memory[self.pc+offset]
         else:
-            return self.instructions[self.pc+offset]
+            raise RuntimeError(
+                f'bad mode {mode} at position {self.pc}')
+
+    def get_param(self, offset):
+        return self.memory[self.get_addr_param(offset)]
+
+    def write_value(self, offset, value):
+        self.memory[self.get_addr_param(offset)] = value
 
     def getAction(self):
-        return abs(self.instructions[self.pc]) % 100
+        return abs(self.memory[self.pc]) % 100
 
     def eval(self):
-        while self.pc < len(self.instructions):
+        while self.pc < len(self.memory):
             action = self.getAction()
             if action == 99:
                 raise StopIteration
             if action == 1:
                 # Add first two into three
-                self.instructions[self.instructions[self.pc+3]
-                                  ] = add(self.getParam(1), self.getParam(2))
+                self.write_value(3, add(self.get_param(1), self.get_param(2)))
                 self.pc += 4
             elif action == 2:
                 # Multiply first two into three
-                self.instructions[self.instructions[self.pc+3]
-                                  ] = mul(self.getParam(1), self.getParam(2))
+                self.write_value(3, mul(self.get_param(1), self.get_param(2)))
                 self.pc += 4
             elif action == 3:
                 # set input at adress
-                self.instructions[self.instructions[self.pc+1]
-                                  ] = self.inputs.get()
+                self.write_value(1, self.inputs.get())
                 self.pc += 2
             elif action == 4:
-                result = self.getParam(1)
+                result = self.get_param(1)
                 self.pc += 2
                 return result
             elif action == 5:
                 # jump-if-true
-                condition = self.getParam(1)
+                condition = self.get_param(1)
                 if condition != 0:
-                    self.pc = self.getParam(2)
+                    self.pc = self.get_param(2)
                 else:
                     self.pc += 3
             elif action == 6:
                 # jump-if-false
-                condition = self.getParam(1)
+                condition = self.get_param(1)
                 if condition == 0:
-                    self.pc = self.getParam(2)
+                    self.pc = self.get_param(2)
                 else:
                     self.pc += 3
             elif action == 7:
                 # less than
-                if self.getParam(1) < self.getParam(2):
-                    self.instructions[self.instructions[self.pc + 3]] = 1
+                if self.get_param(1) < self.get_param(2):
+                    self.write_value(3, 1)
                 else:
-                    self.instructions[self.instructions[self.pc + 3]] = 0
+                    self.write_value(3, 0)
                 self.pc += 4
             elif action == 8:
                 # equals
-                if self.getParam(1) == self.getParam(2):
-                    self.instructions[self.instructions[self.pc + 3]] = 1
+                if self.get_param(1) == self.get_param(2):
+                    self.write_value(3, 1)
                 else:
-                    self.instructions[self.instructions[self.pc + 3]] = 0
+                    self.write_value(3, 0)
                 self.pc += 4
+            elif action == 9:
+                # Relative base update
+                self.rb = self.rb + self.get_param(1)
+                self.pc += 2
             else:
                 raise RuntimeError(
                     f'bad opcode {action} at position {self.pc}')

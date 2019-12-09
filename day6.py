@@ -68,7 +68,10 @@ def parse(lines):
             nodeO2 = Node(o2)
         else:
             # remove node02 from headNodes.heads
-            headNodes.remove(nodeO2)
+            try:
+                headNodes.remove(nodeO2)
+            except:
+                pass
         if nodeO1 is not None:
             nodeO1.add_child(nodeO2)
         else:
@@ -104,5 +107,4 @@ def solve_2(linkedTreeMultiHead, oFrom, oTo):
     nodeFrom = linkedTreeMultiHead.search(oFrom)
     nodeTo = linkedTreeMultiHead.search(oTo)
     commonAncestor = findCommonAncestor(nodeFrom, nodeTo)
-    print(commonAncestor)
     return nodeFrom.numberOfOrbit() + nodeTo.numberOfOrbit() - 2 * commonAncestor.numberOfOrbit()
