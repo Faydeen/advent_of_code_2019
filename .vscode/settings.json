@@ -9,10 +9,5 @@
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.nosetestsEnabled": false,
-<<<<<<< Updated upstream
     "python.testing.unittestEnabled": true
-=======
-    "python.testing.unittestEnabled": true,
-    "python.pythonPath": "C:\\Users\\sanche\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
->>>>>>> Stashed changes
 }

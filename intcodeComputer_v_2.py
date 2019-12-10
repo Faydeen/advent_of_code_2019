@@ -37,20 +37,21 @@ class Computer:
         return abs(self.memory[self.pc]) % 100
 
     def eval(self):
+        """Add an input to the queue"""
         while self.pc < len(self.memory):
             action = self.getAction()
             if action == 99:
                 raise StopIteration
             if action == 1:
-                # Add first two into three
+                """ Add first two into three """
                 self.write_value(3, add(self.get_param(1), self.get_param(2)))
                 self.pc += 4
             elif action == 2:
-                # Multiply first two into three
+                """ Multiply first two into three"""
                 self.write_value(3, mul(self.get_param(1), self.get_param(2)))
                 self.pc += 4
             elif action == 3:
-                # set input at adress
+                """set input at adress"""
                 self.write_value(1, self.inputs.get())
                 self.pc += 2
             elif action == 4:
@@ -58,35 +59,35 @@ class Computer:
                 self.pc += 2
                 return result
             elif action == 5:
-                # jump-if-true
+                """ jump-if-true """
                 condition = self.get_param(1)
                 if condition != 0:
                     self.pc = self.get_param(2)
                 else:
                     self.pc += 3
             elif action == 6:
-                # jump-if-false
+                """ jump-if-false """
                 condition = self.get_param(1)
                 if condition == 0:
                     self.pc = self.get_param(2)
                 else:
                     self.pc += 3
             elif action == 7:
-                # less than
+                """ less than """
                 if self.get_param(1) < self.get_param(2):
                     self.write_value(3, 1)
                 else:
                     self.write_value(3, 0)
                 self.pc += 4
             elif action == 8:
-                # equals
+                """ equals """
                 if self.get_param(1) == self.get_param(2):
                     self.write_value(3, 1)
                 else:
                     self.write_value(3, 0)
                 self.pc += 4
             elif action == 9:
-                # Relative base update
+                """ Relative base update """
                 self.rb = self.rb + self.get_param(1)
                 self.pc += 2
             else:
