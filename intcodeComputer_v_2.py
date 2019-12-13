@@ -11,6 +11,11 @@ class Computer:
         self.pc = 0  # instruction pointer
         self.rb = 0  # Relative base pointer
         self.inputs = SimpleQueue()
+        self.isWaitingForInput = False
+
+    def clear(self):
+        while self.inputs.empty() == False:
+            self.inputs.get()
 
     def get_addr_param(self, offset):
         instruction = str(self.memory[self.pc])
@@ -52,7 +57,9 @@ class Computer:
                 self.pc += 4
             elif action == 3:
                 """set input at adress"""
+                self.isWaitingForInput = True
                 self.write_value(1, self.inputs.get())
+                self.isWaitingForInput = False
                 self.pc += 2
             elif action == 4:
                 result = self.get_param(1)
