@@ -5,7 +5,7 @@ from operator import add, mul
 class Computer:
     def __init__(self, instructions):
         # Init memory
-        self.memory = [0 for i in range(2000)]
+        self.memory = [0 for i in range(5000)]
         # Cree une copie superficiel
         self.memory[:len(instructions)-1] = instructions[:]
         self.pc = 0  # instruction pointer
