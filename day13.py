@@ -1,5 +1,6 @@
 from intcodeComputer_v_2 import Computer
 import matplotlib.pyplot as plt
+from collections import Counter
 
 
 def parse(lines):
@@ -25,4 +26,5 @@ def solve(instruction):
         print("\n")
     plt.imshow(screen, 'gray')
     plt.show()
-    return sum([sum([1 if x == 1 else 0 for x in screen]) for y in screen])
+
+    return sum([Counter(line)[2] for line in screen])
