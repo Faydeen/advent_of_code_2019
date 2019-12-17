@@ -8,7 +8,13 @@ class TestBasic(unittest.TestCase):
         data = puzzle.parse(read_file("14", "1"))
         result = puzzle.solve(data)
         print(f"Solution: {result}")
-        self.assertEqual(True, True)
+        self.assertEqual(result, 628586)
+
+    def test_pass2(self):
+        data = puzzle.parse(read_file("14", "1"))
+        result = puzzle.solve2(data)
+        print(f"Solution: {result}")
+        self.assertEqual(result, 3209254)
 
 
 class TestUnitaire(unittest.TestCase):

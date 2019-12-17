@@ -11,8 +11,11 @@ class Reaction(object):
         result = {}
         howManyReactionRequired = math.ceil(
             howManyOutput / self.produits[name])
-        return dict([(reactif, self.reactifs[reactif] * howManyReactionRequired)
-                     for reactif in self.reactifs])
+        resultReactif = dict([(reactif, self.reactifs[reactif] * howManyReactionRequired)
+                              for reactif in self.reactifs])
+        resultProduit = dict([(produit, -1 * self.produits[produit] * howManyReactionRequired)
+                              for produit in self.produits])
+        return combine_dicts(resultReactif, resultProduit)
 
 
 def parse(lines):
@@ -36,15 +39,40 @@ def combine_dicts(a, b, op=operator.add):
     return {x: a.get(x, 0) + b.get(x, 0) for x in set(a).union(b)}
 
 
+def isReactionOver(required):
+    for r in required:
+        if r != 'ORE' and required[r] > 0:
+            return False
+    return 'ORE' in required
+
+
 def solve(reactions):
     required = {'FUEL': 1}
-    while len(required) != 1 or 'ORE' not in required:
+    while not isReactionOver(required):
         for p in list(required):
-            if p != 'ORE':
+            if p != 'ORE' and required[p] > 0:
                 reaction = findTheOneThatOutput(reactions, p)
                 tempToAdd = reaction.whatINeedToProduce(
                     reactions, p, required[p])
-                del required[p]
                 required = combine_dicts(required, tempToAdd)
 
     return required['ORE']
+
+
+def solve2(reactions):
+    i = math.floor(1000000000000 / solve(reactions))
+    required = {'FUEL': i, 'ORE': 0}
+    while required['ORE'] < 1000000000000:
+
+        required = {'FUEL': i, 'ORE': 0}
+        while not isReactionOver(required):
+            for p in list(required):
+                if p != 'ORE' and required[p] > 0:
+                    reaction = findTheOneThatOutput(reactions, p)
+                    tempToAdd = reaction.whatINeedToProduce(
+                        reactions, p, required[p])
+                    required = combine_dicts(required, tempToAdd)
+        print(f"i : {i}, ORE: {required['ORE']}")
+        i = math.floor(i * 1000000000000/required['ORE'])
+
+    return i
