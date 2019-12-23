@@ -10,6 +10,12 @@ class TestBasic(unittest.TestCase):
         print(f"Solution: {result}")
         self.assertEqual(True, True)
 
+    def test_manual(self):
+        data = puzzle.parse(read_file("15", "1"))
+        result = puzzle.manual(data)
+        print(f"Solution: {result}")
+        self.assertEqual(True, True)
+
 
 if __name__ == '__main__':
     unittest.main()

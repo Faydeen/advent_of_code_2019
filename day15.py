@@ -1,6 +1,8 @@
+from aoc import read_file
 from intcodeComputer_v_2 import Computer
 import sys
 import math
+import os
 
 
 def parse(lines):
@@ -76,3 +78,62 @@ def solve(input):
     position = (math.floor(plan_size/2), math.floor(plan_size/2))
     computer = Computer(input)
     return min(doMove(computer, 1, plan, position), doMove(computer, 2, plan, position), doMove(computer, 3, plan, position), doMove(computer, 4, plan, position))
+
+
+def manual_input(position):
+    print(f"position: {position}")
+    direction = raw_input("\n")
+    if direction == 'z':
+        direction = 1
+    if direction == 's':
+        direction = 2
+    if direction == 'q':
+        direction = 3
+    if direction == 'd':
+        direction = 4
+    if direction not in [1, 2, 3, 4]:
+        return manual_input(position)
+    return direction
+
+
+def print_grid(plan, position):
+    global tank_location, walls
+    grid = [['.' for val in row] for row in plan]
+    if tank_location is not None:
+        (tank_x, tank_y) = tank_location
+        grid[tank_y][tank_x] = 'X'
+    for wall in walls:
+        (wall_x, wall_y) = wall
+        grid[wall_y][wall_x] = '#'
+    pos_x, pos_y = position
+    grid[pos_y][pos_x] = '@'
+    os.system('cls' if os.name == 'nt' else 'clear')
+    for row in grid:
+        print(" ".join(row))
+
+
+tank_location = None
+
+
+def manual(input):
+    global tank_location, walls
+    plan_size = 10
+    plan = [[0 for i in range(plan_size)] for y in range(plan_size)]
+    position = (math.floor(plan_size/2), math.floor(plan_size/2))
+    computer = Computer(input)
+    while True:
+        print_grid(plan, position)
+        newDirection = manual_input(position)
+        computer.put(newDirection)
+        newState = computer.eval()
+        if newState == 0:
+            walls.add(getNextPos(position, newDirection))
+        elif newState == 2:
+            position = getNextPos(position, newDirection)
+            tank_location = getNextPos(position, newDirection)
+        else:
+            position = getNextPos(position, newDirection)
+
+
+data = parse(read_file("15", "1"))
+result = manual(data)
