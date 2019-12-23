@@ -82,7 +82,7 @@ def solve(input):
 
 def manual_input(position):
     print(f"position: {position}")
-    direction = raw_input("\n")
+    direction = input("\n")
     if direction == 'z':
         direction = 1
     if direction == 's':
