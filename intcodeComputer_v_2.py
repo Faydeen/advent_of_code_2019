@@ -3,13 +3,13 @@ from operator import add, mul
 
 
 class Computer:
-    def __init__(self, instructions):
+    def __init__(self, instructions, pc=0, rb=0):
         # Init memory
         self.memory = [0 for i in range(5000)]
         # Cree une copie superficiel
         self.memory[:len(instructions)-1] = instructions[:]
-        self.pc = 0  # instruction pointer
-        self.rb = 0  # Relative base pointer
+        self.pc = pc  # instruction pointer
+        self.rb = rb  # Relative base pointer
         self.inputs = SimpleQueue()
         self.isWaitingForInput = False
 
